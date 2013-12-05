@@ -1,3 +1,4 @@
+/*global alert*/
 window.requestFrame = (function (w,  suffix) {
 	'use strict';
 	return  w['webkitR' + suffix] ||
@@ -11,8 +12,9 @@ window.requestFrame = (function (w,  suffix) {
 			function (cb) { setTimeout(cb, 1000 / 60); };
 })(window, 'equestAnimationFrame');
 
-(function (requestFrame) {
+(function (window) {
 	'use strict';
+
 	var fireworks = [],
 		firworkTrailLength = 3,
 		particles = [],
@@ -23,11 +25,13 @@ window.requestFrame = (function (w,  suffix) {
 		// starting hue
 		hue = 120,
 
-		// when launching fireworks with a click, too many get launched at once without a limiter, one launch per 5 loop ticks
+		// when launching fireworks with a click, too many get launched at once
+		// without a limiter, one launch per 5 loop ticks
 		limiterTotal = 5,
 		limiterTick = 0,
 
-		// this will time the auto launches of fireworks, one launch per 80 loop ticks
+		// this will time the auto launches of fireworks, one launch per 80
+		// loop ticks
 		timerTotal = 50,
 		timerTick = 49,
 		mousedown = false,
@@ -38,13 +42,7 @@ window.requestFrame = (function (w,  suffix) {
 
 		// mouse x,y
 		mx,
-		my,
-
-		stop = false;
-
-
-	/****************************************************/
-
+		my;
 
 	/**
 	 * Firework
@@ -108,9 +106,15 @@ window.requestFrame = (function (w,  suffix) {
 				vy = Math.sin( this.angle ) * this.speed;
 
 			// how far will the firework have traveled with velocities applied?
-			this.distanceTraveled = calculateDistance( this.sx, this.sy, this.x + vx, this.y + vy );
+			this.distanceTraveled = calculateDistance(
+				this.sx,
+				this.sy,
+				this.x + vx,
+				this.y + vy);
 			
-			// if the distance traveled, including velocities, is greater than the initial distance to the target, then the target has been reached
+			// if the distance traveled, including velocities, is greater than
+			// the initial distance to the target, then the target has
+			// been reached
 			if( this.distanceTraveled >= this.distanceToTarget ) {
 				createParticles( this.tx, this.ty );
 
@@ -241,23 +245,13 @@ window.requestFrame = (function (w,  suffix) {
 		}
 	}
 
-	function removeHandler(element, type, handler) {
-		if (element.removeEventListener) {
-			element.removeEventListener(type, handler, false);
-		} else {
-			element.detachEvent('on' + type, handler);
-		}
-	}
-
 	/**
 	 * Loop
 	 */
 	function loop() {
 		var i;
 
-		if (!stop) {
-			requestFrame(loop);
-		}
+		requestFrame(loop);
 
 		hue += 0.5;
 
@@ -291,7 +285,9 @@ window.requestFrame = (function (w,  suffix) {
 		// launch fireworks automatically to random coordinates, when the mouse isn't down
 		if( timerTick >= timerTotal ) {
 			if( !mousedown ) {
-				// start the firework at the bottom middle of the screen, then set the random target coordinates, the random y coordinates will be set within the range of the top half of the screen
+				// start the firework at the bottom middle of the screen, then
+				// set the random target coordinates, the random y coordinates
+				// will be set within the range of the top half of the screen
 				fireworks.push( new Firework( cw / 2, ch, random( 0, cw ), random( 0, ch / 2 ) ) );
 				timerTick = 0;
 			}
@@ -349,7 +345,7 @@ window.requestFrame = (function (w,  suffix) {
 
 		canvas = document.createElement('canvas');
 		canvas.id = 'canvas';
-		canvas.style.cssText = 'background: #000; cursor: crosshair; display: block;';
+		canvas.style.cssText = 'background:#000;background:rgba(0,0,0,0.88);cursor:crosshair;display:block;position:absolute;top:0;left:0;';
 
 		document.body.appendChild(canvas);
 		canvas.width = cw;
@@ -361,5 +357,5 @@ window.requestFrame = (function (w,  suffix) {
 		loop();
 	}
 
-	window.onload = init;
-})(window.requestFrame);
+	init();
+})(window);
