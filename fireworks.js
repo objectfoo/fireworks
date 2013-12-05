@@ -345,7 +345,7 @@ window.requestFrame = (function (w,  suffix) {
 
 		canvas = document.createElement('canvas');
 		canvas.id = 'canvas';
-		canvas.style.cssText = 'background:#000;background:rgba(0,0,0,0.88);cursor:crosshair;display:block;position:absolute;top:0;left:0;';
+		canvas.style.cssText = 'z-index:20000;background:#000;background:rgba(0,0,0,0.88);cursor:crosshair;display:block;position:absolute;top:0;left:0;';
 
 		document.body.appendChild(canvas);
 		canvas.width = cw;
